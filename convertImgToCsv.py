@@ -29,6 +29,7 @@ for filename in os.listdir(dir_path):
     # Create a row for the CSV file
     # The first two columns are 'MeFound' and 'Looking'
     # The rest of the columns are the pixel values
+    #row = [True, "lookingDown"] + img_normalized.tolist()
     row = [True, "lookingDown"] + img_normalized.tolist()
 
     # Add the row to the data
