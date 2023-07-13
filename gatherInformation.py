@@ -12,6 +12,9 @@ if not cap.isOpened():
 start_time = time.time()
 
 # Number of images to capture
+#incase everything is root
+#chmod -R a+rwx .
+
 num_images = 100
 
 # Image counter
