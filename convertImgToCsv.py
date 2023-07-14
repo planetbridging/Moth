@@ -30,13 +30,14 @@ for filename in os.listdir(dir_path):
     # The first two columns are 'MeFound' and 'Looking'
     # The rest of the columns are the pixel values
     #row = [True, "lookingDown"] + img_normalized.tolist()
-    row = [True, "lookingDown"] + img_normalized.tolist()
+    row = ['True'] + img_normalized.tolist()
 
     # Add the row to the data
     data.append(row)
 
 # Column names for the CSV file
-columns = ["MeFound", "Looking"] + [f"Pixel{i}" for i in range(1, len(data[0]) - 1)]
+columns = ["MeFound"] + [f"Pixel{i}" for i in range(1, len(data[0]))]
+
 
 # Create a DataFrame from the data
 df = pd.DataFrame(data, columns=columns)

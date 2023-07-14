@@ -11,9 +11,9 @@ data = pd.read_csv('data2.csv')
 
 # Preprocess the data
 # Assuming "Pixel1" to "Pixel16384" are the feature columns
-# and "MeFound" and "Looking" are the target columns
+# and "MeFound" is the target column
 X = data.loc[:, 'Pixel1':'Pixel16384']
-y = data[['MeFound', 'Looking']]
+y = data['MeFound']
 
 # Normalize the pixel values to be between 0 and 1
 X = X.astype('float32') / 255
@@ -23,8 +23,7 @@ X = X.values.reshape(-1, 128, 128, 1)  # assuming the images are 128x128 pixels
 
 # Convert the labels to integers
 encoder = LabelEncoder()
-y['MeFound'] = encoder.fit_transform(y['MeFound'])
-#y['Looking'] = encoder.fit_transform(y['Looking'])
+y = encoder.fit_transform(y)
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -41,7 +40,7 @@ model.add(Dropout(0.5))
 model.add(Dense(2, activation='softmax'))  # assuming there are 2 classes
 
 # Compile the model
-model.compile(loss=tf.keras.losses.categorical_crossentropy,
+model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
@@ -56,7 +55,6 @@ model.fit(X_train, y_train,
 score = model.evaluate(X_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-
 # Save the model architecture as JSON
 model_json = model.to_json()
 with open("model.json", "w") as json_file:
@@ -65,3 +63,4 @@ with open("model.json", "w") as json_file:
 # Save the model weights
 model.save_weights("model_weights.h5")
 
+#export XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda
