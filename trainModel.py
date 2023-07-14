@@ -15,15 +15,18 @@ data = pd.read_csv('data2.csv')
 X = data.loc[:, 'Pixel1':'Pixel16384']
 y = data['MeFound']
 
+# Convert the labels to integers
+encoder = LabelEncoder()
+y = encoder.fit_transform(y)
+
+# Convert the target variable to float32
+y = y.astype('float32')
+
 # Normalize the pixel values to be between 0 and 1
 X = X.astype('float32') / 255
 
 # Reshape the data
 X = X.values.reshape(-1, 128, 128, 1)  # assuming the images are 128x128 pixels
-
-# Convert the labels to integers
-encoder = LabelEncoder()
-y = encoder.fit_transform(y)
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -37,10 +40,10 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(2, activation='softmax'))  # assuming there are 2 classes
+model.add(Dense(1, activation='sigmoid'))  # assuming there are 2 classes
 
 # Compile the model
-model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+model.compile(loss=tf.keras.losses.binary_crossentropy,
               optimizer=tf.keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
