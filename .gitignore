@@ -1,0 +1,6 @@
+me/
+model_weights.h5
+model.json
+data.csv
+data2.csv
+dataOther.csv

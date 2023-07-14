@@ -18,13 +18,10 @@ y = data[['MeFound', 'Looking']]
 # Normalize the pixel values to be between 0 and 1
 X = X.astype('float32') / 255
 
-# Reshape the data
-X = X.values.reshape(-1, 128, 128, 1)  # assuming the images are 128x128 pixels
-
 # Convert the labels to integers
 encoder = LabelEncoder()
 y['MeFound'] = encoder.fit_transform(y['MeFound'])
-#y['Looking'] = encoder.fit_transform(y['Looking'])
+y['Looking'] = encoder.fit_transform(y['Looking'])
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -41,27 +38,21 @@ model.add(Dropout(0.5))
 model.add(Dense(2, activation='softmax'))  # assuming there are 2 classes
 
 # Compile the model
-model.compile(loss=tf.keras.losses.categorical_crossentropy,
+model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train,
-          batch_size=128,
-          epochs=10,
-          verbose=1,
-          validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train,
+                    batch_size=128,
+                    epochs=10,
+                    verbose=1,
+                    validation_data=(X_test, y_test))
 
 # Evaluate the model on the test data
-score = model.evaluate(X_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
+print('Test loss:', test_loss)
+print('Test accuracy:', test_accuracy)
 
-# Save the model architecture as JSON
-model_json = model.to_json()
-with open("model.json", "w") as json_file:
-    json_file.write(model_json)
-
-# Save the model weights
-model.save_weights("model_weights.h5")
-
+# Save the model architecture and weights
+model.save('model.h5')

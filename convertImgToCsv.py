@@ -42,4 +42,4 @@ columns = ["MeFound", "Looking"] + [f"Pixel{i}" for i in range(1, len(data[0]) -
 df = pd.DataFrame(data, columns=columns)
 
 # Write the DataFrame to a CSV file
-df.to_csv("data.csv", index=False)
+df.to_csv("data2.csv", index=False)

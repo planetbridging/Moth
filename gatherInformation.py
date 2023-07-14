@@ -15,7 +15,7 @@ start_time = time.time()
 #incase everything is root
 #chmod -R a+rwx .
 
-num_images = 100
+num_images = 500
 
 # Image counter
 img_counter = 0
@@ -44,7 +44,7 @@ while img_counter < num_images:
     img_counter += 1
 
     # Wait for 1 second before capturing the next image
-    time.sleep(1)
+    #time.sleep(1)
 
 # Release the webcam
 cap.release()
