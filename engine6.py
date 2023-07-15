@@ -30,17 +30,16 @@ tello = Tello()
 # Connect to the drone
 tello.connect()
 time.sleep(5)  # Wait for 5 seconds
-
+#tello.send_control_command('imu_calib')
 # Check the battery level
 print("Battery level is: %s" % tello.get_battery())
 
 # Start the video stream
 tello.streamon()
-tello.takeoff()
 
 # The drone needs to be in the air to take a picture
-#tello.takeoff()
-
+tello.takeoff()
+time.sleep(5)
 def take_picture():
     # Take a photo
     frame_read = tello.get_frame_read()
@@ -72,7 +71,7 @@ def take_picture():
     # Check if the predicted class is a positive match
     if probabilities > threshold:
         print("Match: Found")
-        tello.move_forward(5) 
+        tello.move_forward(50)
     else:
         print("No Match: Not Found")
     #cv2.imshow('DJI Tello', frame)
