@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten
+from tensorflow.keras.layers import Dense, Dropout, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -34,23 +34,24 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Define the model architecture
 model = Sequential()
 model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(128, 128, 1)))
+model.add(BatchNormalization())  # Added Batch Normalization layer
 model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+model.add(Dropout(0.4))  # Increased dropout rate
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
+model.add(Dropout(0.4))  # Increased dropout rate
 model.add(Dense(1, activation='sigmoid'))  # assuming there are 2 classes
 
 # Compile the model
 model.compile(loss=tf.keras.losses.binary_crossentropy,
-              optimizer=tf.keras.optimizers.Adadelta(),
+              optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),  # Changed optimizer and learning rate
               metrics=['accuracy'])
 
 # Train the model
 model.fit(X_train, y_train,
           batch_size=128,
-          epochs=10,
+          epochs=100,
           verbose=1,
           validation_data=(X_test, y_test))
 
@@ -58,6 +59,7 @@ model.fit(X_train, y_train,
 score = model.evaluate(X_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
 # Save the model architecture as JSON
 model_json = model.to_json()
 with open("model.json", "w") as json_file:

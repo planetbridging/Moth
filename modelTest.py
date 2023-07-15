@@ -13,7 +13,7 @@ loaded_model = model_from_json(loaded_model_json)
 loaded_model.load_weights("model_weights.h5")
 
 # Compile the loaded model
-loaded_model.compile(loss=tf.keras.losses.binary_crossentropy,  # Change loss to 'binary_crossentropy'
+loaded_model.compile(loss=tf.keras.losses.binary_crossentropy,
                      optimizer=tf.keras.optimizers.Adadelta(),
                      metrics=['accuracy'])
 
@@ -51,19 +51,15 @@ while True:
     # Predict the class probabilities
     probabilities = loaded_model.predict(image)
     print(probabilities)
-    # Get the predicted class label
-    predicted_class = np.argmax(probabilities)
 
     # Define the threshold probability for a positive match
-    threshold = 0.5
+    threshold = 0.7
 
-    # Check if the predicted class is a positive match
     # Check if the predicted class is a positive match
     if probabilities > threshold:
         print("Match: Found")
     else:
         print("No Match: Not Found")
-
 
     # Display the grayscale frame
     cv2.imshow("Frame", gray)
