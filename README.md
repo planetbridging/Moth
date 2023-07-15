@@ -1,4 +1,4 @@
-# DJI Tello Object Recognition and Autonomous Flight
+# DJI Tello Image Recognition and Autonomous Flight
 
 This project aims to enable a DJI Tello drone to recognize a specific person and fly towards them using TensorFlow and Python on Kali Linux Purple.
 
