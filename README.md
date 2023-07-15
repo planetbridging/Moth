@@ -84,3 +84,11 @@ Contributions to this project are welcome! If you encounter any issues, have sug
 6. All my data and models are in this link https://drive.google.com/drive/folders/1nYh4WooknSNQGILEzXuDFIYp6qeYELea?usp=sharing
 7. Run python3 showNewFrame.py to show the images its saving live because there is a sync error between djitello lib or python
 8. Run python3 engine6.py to start the drone it will take off and move forward if it detects in the tensorflow model, model can be improved and the djitello could be better in another language
+
+Combine all mp4 cmds:
+
+for f in ./\*.mp4; do echo "file '$f'" >> mylist.txt; done
+
+ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4
+
+Video me playing around with it on youtube: https://youtu.be/9BjWkpzwg-w
