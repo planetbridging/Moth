@@ -1,7 +1,8 @@
 from djitellopy import Tello
 import cv2
-import numpy as np
 import time
+import threading
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 
@@ -15,11 +16,13 @@ loaded_model = model_from_json(loaded_model_json)
 loaded_model.load_weights("model_weights.h5")
 
 # Compile the loaded model
-loaded_model.compile(
-    loss=tf.keras.losses.binary_crossentropy,
-    optimizer=tf.keras.optimizers.Adadelta(),
-    metrics=['accuracy']
-)
+loaded_model.compile(loss=tf.keras.losses.binary_crossentropy,
+                     optimizer=tf.keras.optimizers.Adadelta(),
+                     metrics=['accuracy'])
+
+# Set the width and height of the capture frame
+width, height = 128, 128
+
 
 # Create a Tello instance
 tello = Tello()
@@ -27,21 +30,23 @@ tello = Tello()
 # Connect to the drone
 tello.connect()
 time.sleep(5)  # Wait for 5 seconds
+
+# Check the battery level
+print("Battery level is: %s" % tello.get_battery())
+
+# Start the video stream
 tello.streamon()
 
-# Set the width and height of the capture frame
-width, height = 320, 240
+# The drone needs to be in the air to take a picture
+#tello.takeoff()
 
-# Create an OpenCV window
-cv2.namedWindow("Drone View", cv2.WINDOW_NORMAL)
+def take_picture():
+    # Take a photo
+    frame_read = tello.get_frame_read()
+    frame = frame_read.frame
 
-while True:
-    # Check if the 'q' key is pressed to exit the loop
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-    # Read a frame from the video stream of the drone
-    frame = tello.get_frame_read().frame
+    #cv2.imshow('DJI Tello', frame)
+    cv2.imwrite("./pics/"+f"picture_{time.time()}.jpg", frame)
 
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -68,13 +73,19 @@ while True:
         print("Match: Found")
     else:
         print("No Match: Not Found")
+    #cv2.imshow('DJI Tello', frame)
+    #time.sleep(5)  # Wait for 5 seconds
 
-    # Display the grayscale frame in the window
-    cv2.imshow("Drone View", gray)
+    # Start another timer
+    threading.Timer(5.0, take_picture).start()
 
-# Land the drone and end the video stream
-tello.streamoff()
-# tello.land()
+# Start the first timer
+take_picture()
 
-# Release the window
-cv2.destroyAllWindows()
+
+
+    # Wait for 5 seconds
+    #time.sleep(5)
+
+# Land the drone
+#tello.land()

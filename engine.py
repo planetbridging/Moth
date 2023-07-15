@@ -24,13 +24,20 @@ def take_picture():
     frame_read = tello.get_frame_read()
     frame = frame_read.frame
 
+    #cv2.imshow('DJI Tello', frame)
     cv2.imwrite("./pics/"+f"picture_{time.time()}.jpg", frame)
+    #cv2.imshow('DJI Tello', frame)
+    #time.sleep(5)  # Wait for 5 seconds
 
     # Start another timer
     threading.Timer(5.0, take_picture).start()
 
 # Start the first timer
 take_picture()
+
+
+# Close all OpenCV windows
+cv2.destroyAllWindows()
 
     # Wait for 5 seconds
     #time.sleep(5)
