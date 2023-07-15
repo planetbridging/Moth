@@ -76,7 +76,7 @@ Contributions to this project are welcome! If you encounter any issues, have sug
 
 ## To train your own model
 
-1. Run python3 trainMode.py - this trains the model and saves it to json and h5 format to load and test it
+1. Run python3 trainModel.py - this trains the model and saves it to json and h5 format to load and test it
 2. Run python3 convertImgToCsv.py to convert the images to csv data to prepare the data for the model
 3. Run python3 bulkUpdate.csv and adjust the array for when the person/thing is on the image it says true and false if it isnt which then updates the data in the csv
 4. Run Python3 modelTest.py to check how well the model works on your computer and webcam I got 50%ish which sometimes recognize if I'm on or off the screen. Model could be improved
