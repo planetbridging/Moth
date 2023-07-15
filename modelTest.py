@@ -30,7 +30,7 @@ width, height = 128, 128
 
 while True:
     # Wait for a key press to capture and process a new photo
-    cv2.waitKey(0)
+    #cv2.waitKey(0)
 
     # Read a frame from the webcam
     ret, frame = cap.read()
