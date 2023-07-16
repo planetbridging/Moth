@@ -92,3 +92,4 @@ for f in ./\*.mp4; do echo "file '$f'" >> mylist.txt; done
 ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4
 
 Video me playing around with it on youtube: https://youtu.be/9BjWkpzwg-w
+Video me testing the AI model on youtube: https://www.youtube.com/watch?v=63Z60fuEp-U
